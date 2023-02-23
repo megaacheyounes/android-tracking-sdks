@@ -1,0 +1,24 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        maven {
+            url "https://developer.huawei.com/repo/"
+        }
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
+    repositories {
+        google()
+        maven {
+            url "https://developer.huawei.com/repo/"
+        }
+        mavenCentral()
+    }
+}
+rootProject.name = "TrackingSDKs"
+include ':app'

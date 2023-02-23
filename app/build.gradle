@@ -1,0 +1,151 @@
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+}
+
+
+
+
+android {
+
+    compileSdk 33
+    defaultConfig {
+        applicationId "com.megaache.trackingsdks"
+        minSdk 26
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        general {
+            storeFile file('../keystore.jks')
+            storePassword 'abcd1234'
+            keyAlias 'key0'
+            keyPassword 'abcd1234'
+        }
+    }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.general
+        }
+        release {
+            signingConfig signingConfigs.general
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    buildFeatures {
+        viewBinding true
+    }
+
+    applicationVariants.all { variant ->
+
+        ext {
+            appsflyer_sdk = null
+            appsflyer_oaid = null
+            adjust_version = null
+            kochava_tracker_version = null
+        }
+
+        variant.outputs.all { output ->
+            if (output.outputFile != null) {
+                println(variant.name)
+                outputFileName = "trackingSDKs_" + variant.name + "_" + variant.versionName + '.apk'
+            }
+        }
+    }
+
+
+    flavorDimensions "D"
+    productFlavors {
+        latest {
+            dimension "D"
+
+        }
+        old {
+            dimension "D"
+
+        }
+        older {
+            dimension "D"
+
+        }
+    }
+
+}
+
+
+  def  latest = {
+        appsflyer_sdk = "6.10.0" //feb 2023
+        appsflyer_oaid = "6.9.0" //dec 2023
+
+        adjust_version = "4.33.3" //feb 2023
+        kochava_tracker_version = "4.2.1" //jan 2023
+    }
+   def old = {
+
+        appsflyer_sdk = "6.7.0" //june 2022
+        appsflyer_oaid = "6.4.3" //nov 2021
+
+        adjust_version = "4.30.0" //april 2022
+        kochava_tracker_version = "4.1.0" // may 2022
+    }
+  def  older=  {
+        appsflyer_sdk = "6.4.0" //sep 2021
+        appsflyer_oaid = "6.2.4" //mar 2021
+
+        adjust_version = "4.28.1" //may 2021
+        kochava_tracker_version = "4.0.0" //oct 2021
+    }
+
+
+dependencies {
+
+    implementation "androidx.core:core-ktx:1.9.0"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "com.google.android.material:material:1.8.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
+    testImplementation "junit:junit:4.13.2"
+    androidTestImplementation "androidx.test.ext:junit:1.1.5"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
+
+
+    def appsflyer_sdk = "6.10.0" //feb 2023
+    def appsflyer_oaid = "6.9.0" //dec 2023
+
+    def adjust_version = "4.33.3" //feb 2023
+    def kochava_tracker_version = "4.2.1" //jan 2023
+
+    /**** latest *****/
+    implementation "com.android.installreferrer:installreferrer:2.2"
+    implementation "com.huawei.hms:ads-identifier:3.4.56.300"
+
+    //appsflyer
+    implementation "com.appsflyer:af-android-sdk:$appsflyer_sdk"
+    implementation "com.appsflyer:oaid:$appsflyer_oaid"
+
+    //adjust
+    implementation "com.adjust.sdk:adjust-android:$adjust_version"
+    implementation "com.adjust.sdk:adjust-android-webbridge:$adjust_version"
+
+    //kochava
+    implementation("com.kochava.tracker:tracker:$kochava_tracker_version") // Required
+    implementation("com.kochava.tracker:events:$kochava_tracker_version") // Optional
+    implementation("com.kochava.tracker:engagement:$kochava_tracker_version") // Optional
+    implementation("com.kochava.tracker:datapointnetwork:$kochava_tracker_version") // Optional
+    implementation("com.kochava.tracker:legacyreferrer:$kochava_tracker_version") // Optional
+}
